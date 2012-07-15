@@ -1,0 +1,7 @@
+dist
+temp
+work
+build/results
+cache
+.DS_Store
+.tm_properties
