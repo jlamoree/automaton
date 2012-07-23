@@ -11,8 +11,6 @@
 				}
 			};
 
-			mapDirectory("/model/util");
-			
 			map("userService").to("model.user.UserService");
 			
 		</cfscript>
