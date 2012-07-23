@@ -10,6 +10,8 @@
 		
 		<cfset var user = "null"/>
 		<cfset var query = "null"/>
+
+<cfif>
 		
 		<cfif not arguments.userId and not len(arguments.username)>
 			<cfthrow type="InvalidArgumentException" message="The userId or username must be provided."/>
