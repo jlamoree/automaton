@@ -8,14 +8,6 @@
 		</classpath>
 	</taskdef>
 
-	<fail message="Please upgrade Ant to version 1.8.2. Running version is ${ant.version}">
-		<condition>
-			<not>
-				<contains string="${ant.version}" substring="1.8.2"/>
-			</not>
-		</condition>
-	</fail>
-
 	<!-- Specify the server.name property via the Ant options. Ex: ant -Dserver.name=foo build -->
 	<property file="${server.name}.properties"/>
 	
