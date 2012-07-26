@@ -11,8 +11,6 @@
 		<cfset var user = "null"/>
 		<cfset var query = "null"/>
 
-<cfif Introducing an error on purpose. The unit test should catch this.
-		
 		<cfif not arguments.userId and not len(arguments.username)>
 			<cfthrow type="InvalidArgumentException" message="The userId or username must be provided."/>
 		</cfif>
