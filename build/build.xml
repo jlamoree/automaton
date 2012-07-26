@@ -7,7 +7,7 @@
 			<pathelement location="lib/ant-contrib-1.0b3.jar"/>
 		</classpath>
 	</taskdef>
-
+	
 	<!-- Specify the server.name property via the Ant options. Ex: ant -Dserver.name=foo build -->
 	<property file="${server.name}.properties"/>
 	
@@ -19,8 +19,12 @@
 	<property name="project.src" location="../src"/>
 	<property name="project.doc" location="../doc"/>
 	<property name="project.lib" location="../lib"/>
+	<property name="project.cache" location="../cache"/>
 	<property name="project.work" location="../work"/>
 	<property name="project.results" location="${project.build}/results"/>
+	<property name="project.cdn" value="http://cdn.automatonapp.com"/>
+
+	<import file="${project.build}/macrodefs/requirefile.xml"/>
 
 	<!-- Tomcat -->
 	<property name="tomcat.home" location="/var/lib/tomcat"/>
@@ -46,10 +50,10 @@
 
 	<!-- Railo -->
 	<property name="railo.server.path" location="${cfml.engine.webinf}/lib/railo-server"/>
-	<property name="railo.dist" location="${project.lib}/railo-3.3.1.war"/>
+	<property name="railo.dist" value="railo-3.3.4.003.war"/>
 	
 	<!-- ColdBox -->
-	<property name="coldbox.dist" location="${project.lib}/coldbox-standalone-3.5.0.zip"/>
+	<property name="coldbox.dist" value="coldbox_standalone_3.5.1.zip"/>
 	
 	<!-- Webapp Properties -->
 	<property name="webapp.server" value="${nginx.hostname}"/>
@@ -59,20 +63,20 @@
 
 	<!-- MX Unit -->
 	<property name="mxunit.jar" location="${project.build}/lib/mxunit-ant.jar"/>
-	<property name="mxunit.dist" location="${project.lib}/mxunit-framework-2.1.0.zip"/>
+	<property name="mxunit.dist" value="mxunit-framework-2.1.0.zip"/>
 	<property name="mxunit.outputdir" location="${project.results}"/>
 	<property name="mxunit.timeout" value="300"/>
 	<property name="mxunit.runner" value="/test/resources/HttpAntRunner.cfc?requestTimeout=${mxunit.timeout}"/>
 
 	<!-- VarScoper -->
-	<property name="varscoper.dist" location="${project.lib}/varscoper4.zip"/>
+	<property name="varscoper.dist" value="varscoper4.zip"/>
 	<property name="varscoper.url" value="http://${webapp.server}:${webapp.port}/test/varscoper/varScoper.cfm"/>
 	<property name="varscoper.path" value="${webapp.path}/model"/>
 	<property name="varscoper.recurse" value="true"/>
 	<property name="varscoper.outputfile" location="${project.results}/varscoper.csv"/>
 
 	<!-- ColdDoc -->
-	<property name="colddoc.dist" location="${project.lib}/colddoc_v1.0.zip"/>
+	<property name="colddoc.dist" value="colddoc_v1.0.zip"/>
 	<property name="colddoc.output" value="${java.io.tmpdir}/colddoc.html"/>
 
 	<!-- Deploy information -->
@@ -169,8 +173,9 @@
 	</target>
 	
 	<target name="deploy-libs" depends="init" description="Deploy all the libraries needed by the CFML application.">
+		<requirefile file="${project.cache}/${coldbox.dist}" url="${project.cdn}/dist/${coldbox.dist}"/>
 		<delete dir="${cfml.engine.webroot}/coldbox"/>
-		<unzip src="${coldbox.dist}" dest="${cfml.engine.webroot}/coldbox"/>
+		<unzip src="${project.cache}/${coldbox.dist}" dest="${cfml.engine.webroot}/coldbox"/>
 	</target>
 
 	<target name="deploy-nginx">
@@ -227,8 +232,10 @@
 	</target>
 
 	<target name="deploy-unittests" depends="init" description="Deploy the MX Unit framework and all of the test cases.">
+		<requirefile file="${project.cache}/${mxunit.dist}" url="${project.cdn}/dist/${mxunit.dist}"/>
+		
 		<delete dir="${cfml.engine.webroot}/mxunit"/>
-		<unzip src="${mxunit.dist}" dest="${cfml.engine.webroot}/mxunit"/>
+		<unzip src="${project.cache}/${mxunit.dist}" dest="${cfml.engine.webroot}/mxunit"/>
 		
 		<copy todir="${cfml.engine.webroot}/test" overwrite="true">
 			<fileset dir="${project.test}">
@@ -246,10 +253,12 @@
 	</target>
 
 	<target name="deploy-varscoper" depends="init" description="Deploy the files needed to run a varscoper test.">
+		<requirefile file="${project.cache}/${varscoper.dist}" url="${project.cdn}/dist/${varscoper.dist}"/>
+		
 		<delete dir="${cfml.engine.webroot}/test/varscoper"/>
 		<mkdir dir="${cfml.engine.webroot}/test/varscoper"/>
 		<touch file="${cfml.engine.webroot}/test/varscoper/Application.cfc"/>
-		<unzip src="${project.lib}/varscoper4.zip" dest="${cfml.engine.webroot}/test/varscoper">
+		<unzip src="${project.cache}/${varscoper.dist}" dest="${cfml.engine.webroot}/test/varscoper">
 			<patternset>
 				<include name="display*.cfm"/>
 				<include name="fileDisplay.cfm"/>
@@ -261,8 +270,10 @@
 	</target>
 
 	<target name="deploy-colddoc" depends="init" description="Deploy the ColdDoc tool.">
+		<requirefile file="${project.cache}/${colddoc.dist}" url="${project.cdn}/dist/${colddoc.dist}"/>
+		
 		<delete dir="${cfml.engine.webroot}/colddoc"/>
-		<unzip src="${project.lib}/colddoc_v1.0.zip" dest="${cfml.engine.webroot}/colddoc">
+		<unzip src="${project.cache}/${colddoc.dist}" dest="${cfml.engine.webroot}/colddoc">
 			<patternset>
 				<include name="colddoc/license.txt"/>
 				<include name="colddoc/ColdDoc.cfc"/>
@@ -273,6 +284,8 @@
 	</target>
 	
 	<target name="deploy-railo" depends="init">
+		<requirefile file="${project.cache}/${railo.dist}" url="${project.cdn}/dist/${railo.dist}"/>
+		
 		<delete dir="${tomcat.vhosts}/${tomcat.docbase}">
 			<patternset>
 				<include name="WEB-INF/**"/>
@@ -280,7 +293,7 @@
 				<exclude name="WEB-INF/lib/railo-server/context/railo-server.xml"/>
 			</patternset>
 		</delete>
-		<unwar src="${railo.dist}" dest="${tomcat.vhosts}/${tomcat.docbase}">
+		<unwar src="${project.cache}/${railo.dist}" dest="${tomcat.vhosts}/${tomcat.docbase}">
 			<patternset>
 				<include name="WEB-INF/**"/>
 			</patternset>

@@ -1,0 +1,12 @@
+<project>
+
+	<macrodef name="requirefile">
+		<attribute name="file"/>
+		<attribute name="url"/>
+		
+		<sequential>
+			<get src="@{url}" dest="@{file}" skipexisting="true"/>
+		</sequential>
+	</macrodef>
+
+</project>
