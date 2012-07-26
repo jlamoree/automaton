@@ -7,6 +7,12 @@
 			<pathelement location="lib/ant-contrib-1.0b3.jar"/>
 		</classpath>
 	</taskdef>
+
+	<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask">
+		<classpath>
+			<pathelement location="lib/ant-jmeter-1.1.1.jar"/>
+		</classpath>
+	</taskdef>
 	
 	<!-- Specify the server.name property via the Ant options. Ex: ant -Dserver.name=foo build -->
 	<property file="${server.name}.properties"/>
@@ -103,6 +109,10 @@
 	<property name="http.appProxy.clientAddressHeaderName" value="X-Forwarded-Client-IP"/>
 	<property name="http.appProxy.secureEndpointHeaderName" value="X-Forwarded-Secure-Endpoint"/>	
 
+	<!-- jMeter Config -->
+	<property name="jmeter.home" location="jMeter"/>
+	<property name="jmeter.threads" value="10"/>
+	<property name="jmeter.loop" value="1"/>
 
 	<target name="init" description="Initialize working directory and perform sanity check.">
 		<echo message="Starting Ant from ${basedir} by user ${user.name}"/>
@@ -362,4 +372,10 @@
 		<get src="http://${webapp.server}:${webapp.port}/doc/generate.cfm" dest="${colddoc.output}" verbose="false"/>
 	</target>
 
+	<target name="test-jmeter" description="Run jMeter load tests">
+		<jmeter jmeterhome="${jmeter.home}" testplan="${project.test}/jmeter/user-login.jmx" resultlog="${project.results}/jmeter/user-login.jtl">
+			<property name="request.threads" value="${jmeter.threads}"/>
+			<property name="request.loop" value="${jmeter.loop}"/>
+		</jmeter>
+	</target>
 </project>
