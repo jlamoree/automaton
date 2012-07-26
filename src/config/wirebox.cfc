@@ -11,7 +11,8 @@
 				}
 			};
 
-			map("userService").to("model.user.UserService");
+			map("userService")
+				.to("model.user.UserService");
 			
 		</cfscript>
 	</cffunction>

@@ -1,4 +1,4 @@
-<cfcomponent output="false">
+<cfcomponent singleton="true" output="false">
 
 	<cffunction name="init" returntype="UserService" access="public" output="false">
 		<cfreturn this/>
