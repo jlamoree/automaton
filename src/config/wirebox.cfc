@@ -11,9 +11,10 @@
 				}
 			};
 
-			mapDirectory("/model/user");
-
-			//map("userService").to("model.user.UserService");
+			map("userService")
+				.to("model.user.UserService")
+				.asEagerInit()
+				.asSingleton();
 			
 		</cfscript>
 	</cffunction>
