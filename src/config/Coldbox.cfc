@@ -18,7 +18,6 @@
 			];
 
 			variables.wirebox = {
-				enabled = true,
 				singletonReload = false
 			};
 
@@ -44,7 +43,7 @@
 				},
 				root = {levelMin="FATAL", levelMax="DEBUG", appenders="*"},
 				categories = {
-					"coldbox.system" = {levelMax="DEBUG", appenders="console"},
+					"coldbox.system" = {levelMax="WARN", appenders="console"},
 					"interceptors.AuthSession" = {levelMax="DEBUG", appenders="console"}
 				}
 			};
