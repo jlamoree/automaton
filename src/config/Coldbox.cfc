@@ -18,7 +18,6 @@
 			];
 
 			variables.wirebox = {
-				enabled = true,
 				singletonReload = false
 			};
 
