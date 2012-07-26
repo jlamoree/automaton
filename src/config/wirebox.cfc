@@ -12,9 +12,7 @@
 			};
 
 			map("userService")
-				.to("model.user.UserService")
-				.asEagerInit()
-				.asSingleton();
+				.to("model.user.UserService");
 			
 		</cfscript>
 	</cffunction>

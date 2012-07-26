@@ -1,6 +1,6 @@
 <cfcomponent extends="coldbox.system.EventHandler" output="false">
 
-	<cfproperty name="userService" inject="id:userService"/>
+	<cfproperty name="userService" inject="userService"/>
 	<cfproperty name="sessionStorage" inject="coldbox:plugin:sessionStorage"/>
 	<cfproperty name="log" inject="logbox:logger:{this}"/>
 
