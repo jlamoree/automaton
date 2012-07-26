@@ -4,6 +4,8 @@
 		<cfreturn this/>
 	</cffunction>
 
+<cfif this is a problem
+
 	<cffunction name="getUser" returntype="User" access="public" output="false">
 		<cfargument name="userId" type="numeric" required="false" default="0"/>
 		<cfargument name="username" type="string" required="false" default=""/>
