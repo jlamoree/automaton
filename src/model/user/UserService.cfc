@@ -10,6 +10,8 @@
 		
 		<cfset var user = "null"/>
 		<cfset var query = "null"/>
+
+<cfif Introducing an error on purpose. The unit test should catch this.
 		
 		<cfif not arguments.userId and not len(arguments.username)>
 			<cfthrow type="InvalidArgumentException" message="The userId or username must be provided."/>
@@ -22,7 +24,7 @@
 				WHERE userId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.userId#"/>
 			</cfquery>
 			<cfif not query.recordCount>
-				<cfthrow type="UserNotFoundException" message="The user with userId #userId# does not exist.">
+				<cfthrow type="UserNotFoundException" message="The username or password were incorrect.">
 			</cfif>
 		<cfelse>
 			<cfquery name="query">
@@ -31,7 +33,7 @@
 				WHERE username = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.username#"/>
 			</cfquery>
 			<cfif not query.recordCount>
-				<cfthrow type="UserNotFoundException" message="The user with username #username# does not exist.">
+				<cfthrow type="UserNotFoundException" message="The username or password were incorrect.">
 			</cfif>
 		</cfif>
 
