@@ -6,6 +6,28 @@ CREATE LANGUAGE plpgsql;
 */
 
 /*
+Application User
+*/
+
+-- Production
+CREATE ROLE automaton WITH LOGIN PASSWORD 'secret';
+
+-- Development
+-- ALTER ROLE automaton WITH PASSWORD 'secret';
+
+/*
+Database
+*/
+CREATE DATABASE automaton WITH OWNER = automaton ENCODING = 'UTF-8';
+
+
+/*
+========================
+LOGIN AS AUTOMATON USER
+========================
+*/
+
+/*
 Last Modified Trigger Function
 
 Usage:
@@ -20,19 +42,3 @@ BEGIN
    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
-/*
-Database
-*/
-CREATE DATABASE automaton WITH OWNER = automaton ENCODING = 'UTF-8';
-
-
-/*
-Application User
-*/
-
--- Production
-CREATE ROLE automaton WITH LOGIN PASSWORD 'secret';
-
--- Development
--- ALTER ROLE automaton WITH PASSWORD 'secret';
