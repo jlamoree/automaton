@@ -44,7 +44,7 @@
 				},
 				root = {levelMin="FATAL", levelMax="DEBUG", appenders="*"},
 				categories = {
-					"coldbox.system" = {levelMax="WARN", appenders="console"},
+					"coldbox.system" = {levelMax="DEBUG", appenders="console"},
 					"interceptors.AuthSession" = {levelMax="DEBUG", appenders="console"}
 				}
 			};
