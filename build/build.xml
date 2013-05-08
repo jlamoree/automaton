@@ -53,10 +53,6 @@
 	<property name="nginx.app.server" value="127.0.0.1"/>
 	<property name="nginx.app.port" value="8080"/>
 	<property name="nginx.app.webroot" value="${cfml.engine.webroot}"/>
-
-	<!-- Railo -->
-	<property name="railo.server.path" location="${cfml.engine.webinf}/lib/railo-server"/>
-	<property name="railo.dist" value="railo-3.3.4.003.war"/>
 	
 	<!-- ColdBox -->
 	<property name="coldbox.dist" value="coldbox_standalone_3.5.1.zip"/>
@@ -87,7 +83,7 @@
 
 	<!-- Deploy information -->
 	<tstamp>
-		<format property="deploy.release" pattern="yyyyMMdd"/>
+		<format property="deploy.release" pattern="yyyyMMddHHmmss"/>
 	</tstamp>
 	<property name="deploy.hostname" value="${nginx.hostname}"/>
 	<property name="deploy.port" value="${nginx.port}"/>
@@ -291,36 +287,6 @@
 			</patternset>
 			<regexpmapper from="^colddoc/(.+)$$" to="\1"/>
 		</unzip>
-	</target>
-	
-	<target name="deploy-railo" depends="init">
-		<requirefile file="${project.cache}/${railo.dist}" url="${project.cdn}/dist/${railo.dist}"/>
-		
-		<delete dir="${tomcat.vhosts}/${tomcat.docbase}">
-			<patternset>
-				<include name="WEB-INF/**"/>
-				<exclude name="WEB-INF/railo/railo-web.xml.cfm"/>
-				<exclude name="WEB-INF/lib/railo-server/context/railo-server.xml"/>
-			</patternset>
-		</delete>
-		<unwar src="${project.cache}/${railo.dist}" dest="${tomcat.vhosts}/${tomcat.docbase}">
-			<patternset>
-				<include name="WEB-INF/**"/>
-			</patternset>
-		</unwar>
-		<copy todir="${cfml.engine.webinf}" overwrite="true">
-			<fileset dir="${project.src}/config/railo">
-				<include name="*.xml"/>
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="update-railo" depends="init">
-		<copy todir="${railo.server.path}/patches" overwrite="true">
-			<fileset dir="${project.lib}">
-				<include name="*.rc"/>
-			</fileset>
-		</copy>
 	</target>
 
 	<target name="undeploy" depends="init" description="Remove a deployed copy of the application and libraries.">
