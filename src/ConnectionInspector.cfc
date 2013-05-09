@@ -7,12 +7,11 @@
 			<cfset variables.defaults = arguments.options/>
 		<cfelse>
 			<cfset variables.defaults = structNew()/>
-			<cfset variables.defaults.appProxyEnabled = "@APP_PROXY_ENABLED@"/>
 			<cfset variables.defaults.appProxyServerHostHeaderName = "@APP_PROXY_SERVER_HOST_HEADER_NAME@"/>
 			<cfset variables.defaults.appProxyServerAddressHeaderName = "@APP_PROXY_SERVER_ADDRESS_HEADER_NAME@"/>
 			<cfset variables.defaults.appProxyServerPortHeaderName = "@APP_PROXY_SERVER_PORT_HEADER_NAME@"/>
 			<cfset variables.defaults.appProxyClientAddressHeaderName = "@APP_PROXY_CLIENT_ADDRESS_HEADER_NAME@"/>
-			<cfset variables.defaults.appProxySecureEndpointHeaderName = "@APP_PROXY_SECURE_ENDPOINT_HEADER_NAME@"/>
+			<cfset variables.defaults.appProxySchemeHeaderName = "@APP_PROXY_SCHEME_HEADER_NAME@"/>
 		</cfif>
 
 		<cfif structKeyExists(arguments, "options") and structKeyExists(arguments.options, "nodeName")>
@@ -37,18 +36,10 @@
 		<cfset memento.client = structNew()/>
 		<cfset memento.server = structNew()/>
 
-		<cfif d.appProxyEnabled>
-			<cfset memento.server.host = structValue(headers, d.appProxyServerHostHeaderName, "unknown")/>
-			<cfset memento.server.address = structValue(headers, d.appProxyServerAddressHeaderName, "0.0.0.0")/>
-			<cfset memento.server.port = structValue(headers, d.appProxyServerPortHeaderName, "0")/>
-			<cfset memento.client.address = structValue(headers, d.appProxyClientAddressHeaderName, "0.0.0.0")/>
-		<cfelse>
-			<cfset memento.server.host = memento.node.host/>
-			<cfset memento.server.address = memento.node.address/>
-			<cfset memento.server.port = memento.node.port/>
-			<cfset memento.client.address = structValue(cgi, "REMOTE_ADDR", "0.0.0.0")/>
-		</cfif>
-
+		<cfset memento.server.host = structValue(headers, d.appProxyServerHostHeaderName, "unknown")/>
+		<cfset memento.server.address = structValue(headers, d.appProxyServerAddressHeaderName, "0.0.0.0")/>
+		<cfset memento.server.port = structValue(headers, d.appProxyServerPortHeaderName, "0")/>
+		<cfset memento.client.address = structValue(headers, d.appProxyClientAddressHeaderName, "0.0.0.0")/>
 		<cfreturn memento/>
 	</cffunction>
 

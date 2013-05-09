@@ -14,6 +14,7 @@
 			variables.interceptors = [
 				{class="coldbox.system.interceptors.Autowire", properties={}},
 				{class="coldbox.system.interceptors.SES"},
+				{class="interceptors.Headers"},
 				{class="interceptors.AuthSession"}
 			];
 
@@ -22,8 +23,9 @@
 			};
 
 			variables.settings = {
-				version = "1.0",
+				version = "@VERSION@",
 				release = "@RELEASE@",
+				nodeName = "@NODE_NAME@",
 				site = {
 					title = "The Automaton"
 				}

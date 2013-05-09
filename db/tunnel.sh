@@ -1,0 +1,10 @@
+#!/bin/sh
+
+SERVER_HOST=automatonapp.com
+SERVER_USER=ec2-user
+IDENTITY=~/.ssh/automaton-key-pair.pem
+REMOTE_HOST=localhost
+REMOTE_PORT=5432
+LOCAL_PORT=5432
+
+ssh -N -l $SERVER_USER -i $IDENTITY -L $LOCAL_PORT:$REMOTE_HOST:$REMOTE_PORT $SERVER_HOST &

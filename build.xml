@@ -4,29 +4,35 @@
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
-			<pathelement location="lib/ant-contrib-1.0b3.jar"/>
+			<pathelement location="build/lib/ant-contrib-1.0b3.jar"/>
 		</classpath>
 	</taskdef>
 
 	<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask">
 		<classpath>
-			<pathelement location="lib/ant-jmeter-1.1.1.jar"/>
+			<pathelement location="build/lib/ant-jmeter-1.1.1.jar"/>
 		</classpath>
 	</taskdef>
-	
-	<!-- Specify the server.name property via the Ant options. Ex: ant -Dserver.name=foo build -->
-	<property file="${server.name}.properties"/>
-	
-	<!-- The user.name system property is provided by the JVM, which reads the environment variable %USERNAME% or $USER -->
-	<property file="${user.name}.properties"/>
 
-	<property name="project.build" location="."/>
-	<property name="project.test" location="../test"/>
-	<property name="project.src" location="../src"/>
-	<property name="project.doc" location="../doc"/>
-	<property name="project.lib" location="../lib"/>
-	<property name="project.cache" location="../cache"/>
-	<property name="project.work" location="../work"/>
+	<property name="version" value="1.0"/>
+
+	<!-- Node properties for multiple instances on a single server. Ex: ant -Dnode.name=node01 build -->
+	<property file="./build/${node.name}.properties"/>
+	<property name="node.name" value="localhost"/>
+
+	<!-- Specify the server.name property via the Ant options. Ex: ant -Dserver.name=foo build -->
+	<property file="./build/${server.name}.properties"/>
+
+	<!-- The user.name system property is provided by the JVM, which reads the environment variable %USERNAME% or $USER -->
+	<property file="./build/${user.name}.properties"/>
+
+	<property name="project.build" location="./build"/>
+	<property name="project.test" location="./test"/>
+	<property name="project.src" location="./src"/>
+	<property name="project.doc" location="./doc"/>
+	<property name="project.lib" location="./lib"/>
+	<property name="project.cache" location="./cache"/>
+	<property name="project.work" location="./work"/>
 	<property name="project.results" location="${project.build}/results"/>
 	<property name="project.cdn" value="http://cdn.automatonapp.com"/>
 
@@ -38,29 +44,25 @@
 	<property name="tomcat.docbase" value="automaton"/>
 
 	<!-- CFML Engine -->
-	<property name="cfml.engine" value="railo-3.3"/>
+	<property name="cfml.engine" value="railo-4"/>
 	<property name="cfml.engine.root" location="${tomcat.vhosts}/${tomcat.docbase}"/>
 	<property name="cfml.engine.webinf" location="${cfml.engine.root}/WEB-INF"/>
 	<property name="cfml.engine.webroot" value="${cfml.engine.root}"/>
+	<property name="cfml.engine.hostname" value="127.0.0.1"/>
+	<property name="cfml.engine.port" value="8080"/>
 
-	<!-- Nginx -->
+	<!-- NGINX -->
 	<property name="nginx.root" value="/usr/share/nginx"/>
 	<property name="nginx.exec" value="/usr/sbin/nginx"/>
 	<property name="nginx.conf" value="/etc/nginx/conf.d"/>
 	<property name="nginx.hostname" value="automatonapp.com"/>
 	<property name="nginx.port" value="80"/>
 	<property name="nginx.log.path" value="/var/log/nginx"/>
-	<property name="nginx.app.server" value="127.0.0.1"/>
-	<property name="nginx.app.port" value="8080"/>
-	<property name="nginx.app.webroot" value="${cfml.engine.webroot}"/>
 	
 	<!-- ColdBox -->
 	<property name="coldbox.dist" value="coldbox_standalone_3.5.1.zip"/>
 	
 	<!-- Webapp Properties -->
-	<property name="webapp.server" value="${nginx.hostname}"/>
-	<property name="webapp.port" value="${nginx.port}"/>
-	<property name="webapp.path" location="${cfml.engine.webroot}"/>
 	<property name="webapp.datasource" value="automaton"/>
 
 	<!-- MX Unit -->
@@ -72,8 +74,8 @@
 
 	<!-- VarScoper -->
 	<property name="varscoper.dist" value="varscoper4.zip"/>
-	<property name="varscoper.url" value="http://${webapp.server}:${webapp.port}/test/varscoper/varScoper.cfm"/>
-	<property name="varscoper.path" value="${webapp.path}/model"/>
+	<property name="varscoper.url" value="http://${nginx.app.server}:${nginx.app.port}/test/varscoper/varScoper.cfm"/>
+	<property name="varscoper.path" value="${cfml.engine.webroot}/model"/>
 	<property name="varscoper.recurse" value="true"/>
 	<property name="varscoper.outputfile" location="${project.results}/varscoper.csv"/>
 
@@ -98,12 +100,11 @@
 	</if>
 
 	<!-- HTTP Headers -->
-	<property name="http.appProxy.enabled" value="true"/>
-	<property name="http.appProxy.serverHostHeaderName" value="X-Forwarded-Server-Host"/>
-	<property name="http.appProxy.serverAddressHeaderName" value="X-Forwarded-Server-IP"/>
-	<property name="http.appProxy.serverPortHeaderName" value="X-Forwarded-Server-Port"/>
-	<property name="http.appProxy.clientAddressHeaderName" value="X-Forwarded-Client-IP"/>
-	<property name="http.appProxy.secureEndpointHeaderName" value="X-Forwarded-Secure-Endpoint"/>	
+	<property name="http.appProxy.serverHostHeaderName" value="X-NGINX-Host"/>
+	<property name="http.appProxy.serverAddressHeaderName" value="X-NGINX-Server-IP"/>
+	<property name="http.appProxy.serverPortHeaderName" value="X-NGINX-Server-Port"/>
+	<property name="http.appProxy.clientAddressHeaderName" value="X-NGINX-Client-IP"/>
+	<property name="http.appProxy.schemeHeaderName" value="X-NGINX-Scheme"/>
 
 	<!-- jMeter Config -->
 	<property name="jmeter.home" location="jMeter"/>
@@ -140,7 +141,9 @@
 				<include name="*.cfm"/>
 			</fileset>
 			<filterset>
+				<filter token="VERSION" value="${deploy.version}"/>
 				<filter token="RELEASE" value="${deploy.release}"/>
+				<filter token="NODE_NAME" value="${node.name}"/>
 				<filter token="DEPLOY_BASEURL" value="${deploy.baseurl}"/>
 			</filterset>
 		</copy>
@@ -168,12 +171,11 @@
 				<include name="ConnectionInspector.cfc"/>
 			</fileset>
 			<filterset>
-				<filter token="APP_PROXY_ENABLED" value="${http.appProxy.enabled}"/>
 				<filter token="APP_PROXY_SERVER_HOST_HEADER_NAME" value="${http.appProxy.serverHostHeaderName}"/>
 				<filter token="APP_PROXY_SERVER_ADDRESS_HEADER_NAME" value="${http.appProxy.serverAddressHeaderName}"/>
 				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${http.appProxy.serverPortHeaderName}"/>
 				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${http.appProxy.clientAddressHeaderName}"/>
-				<filter token="APP_PROXY_SECURE_ENDPOINT_HEADER_NAME" value="${http.appProxy.secureEndpointHeaderName}"/>
+				<filter token="APP_PROXY_SCHEME_HEADER_NAME" value="${http.appProxy.schemeHeaderName}"/>
 			</filterset>
 		</copy>
 	</target>
@@ -220,7 +222,6 @@
 				<filter token="NGINX_APP_SERVER" value="${nginx.app.server}"/>
 				<!-- Different for Windows vs. non-Windows -->
 				<filter token="NGINX_APP_WEBROOT" value="${nginx.app.webroot}"/>
-				<filter token="APP_PROXY_ENABLED" value="${http.appProxy.enabled}"/>
 				<filter token="APP_PROXY_SERVER_HOST_HEADER_NAME" value="${http.appProxy.serverHostHeaderName}"/>
 				<filter token="APP_PROXY_SERVER_ADDRESS_HEADER_NAME" value="${http.appProxy.serverAddressHeaderName}"/>
 				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${http.appProxy.serverPortHeaderName}"/>
@@ -295,6 +296,7 @@
 			<fileset dir="${cfml.engine.webroot}">
 				<include name="**/*"/>
 				<exclude name="WEB-INF/"/>
+				<exclude name="META-INF/"/>
 				<exclude name="CFIDE/"/>
 			</fileset>
 		</delete>
@@ -305,8 +307,8 @@
 
 		<delete dir="${project.results}"/>
 		<mkdir dir="${project.results}"/>
-		<mxunittask server="${webapp.server}" port="${webapp.port}" outputdir="${mxunit.outputdir}" defaultrunner="${mxunit.runner}">
-			<directory path="${webapp.path}/test/unit" recurse="true" componentPath="test.unit"/>
+		<mxunittask server="${cfml.engine.hostname}" port="${cfml.engine.port}" outputdir="${mxunit.outputdir}" defaultrunner="${mxunit.runner}">
+			<directory path="${cfml.engine.webroot}/test/unit" recurse="true" componentPath="test.unit"/>
 		</mxunittask>
 	</target>
 
@@ -335,7 +337,7 @@
 			</fileset>
 		</copy>
 		
-		<get src="http://${webapp.server}:${webapp.port}/doc/generate.cfm" dest="${colddoc.output}" verbose="false"/>
+		<get src="http://${cfml.engine.hostname}:${cfml.engine.port}/doc/generate.cfm" dest="${colddoc.output}" verbose="false"/>
 	</target>
 
 	<target name="test-jmeter" description="Run jMeter load tests">
