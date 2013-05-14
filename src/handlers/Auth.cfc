@@ -8,7 +8,6 @@
 		<cfargument name="event" type="coldbox.system.web.context.RequestContext" required="true"/>
 
 		<cfset arguments.event.setValue("pageTitle", "Login")/>
-		<cfset arguments.event.setLayout("main")>
 		<cfset arguments.event.setView("auth/index")/>
 	</cffunction>
 
@@ -56,13 +55,13 @@
 			</cfif>
 		</cfif>
 
+		<cfset variables.flash.put("result", result)/>
 		<cfif result.status eq "success">
 			<cfset setNextEvent("Home.index")/>
 		<cfelse>
 			<cfif structKeyExists(variables, "log") and variables.log.canError()>
 				<cfset variables.log.error(result.message)/>
 			</cfif>
-			<cfset variables.flash.put("result", result)/>
 			<cfset setNextEvent("Auth.index")/>
 		</cfif>
 	</cffunction>
@@ -73,6 +72,9 @@
 		<cfset var _event = arguments.event/>
 
 		<cfif variables.sessionStorage.exists("user")>
+			<cfif structKeyExists(variables, "log") and variables.log.canInfo()>
+				<cfset variables.log.info("Removed user from sessionStorage")/>
+			</cfif>
 			<cfset variables.sessionStorage.deleteVar("user")/>
 		</cfif>
 		<cfset setNextEvent("Home.index")/>

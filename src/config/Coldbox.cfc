@@ -42,10 +42,12 @@
 				appenders = {
 					console = { class="coldbox.system.logging.appenders.ConsoleAppender" }
 				},
-				root = {levelMin="FATAL", levelMax="DEBUG", appenders="*"},
+				root = {levelMin="FATAL", levelMax="INFO", appenders="*"},
 				categories = {
 					"coldbox.system" = {levelMax="WARN", appenders="console"},
-					"interceptors.AuthSession" = {levelMax="DEBUG", appenders="console"}
+					"interceptors.AuthSession" = {levelMax="INFO", appenders="console"},
+					"interceptors.Headers" = {levelMax="WARN", appenders="console"},
+					"handlers.Auth" = {levelMax="INFO", appenders="console"}
 				}
 			};
 

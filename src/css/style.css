@@ -15,35 +15,3 @@ a:hover, a:active {
 	font-size: 24px;
 	color: #734700;
 }
-
-#loginForm {
-	margin: 20px auto;
-	width: 400px;
-}
-
-#loginForm p {
-	margin: 10px 0;
-}
-
-#loginForm label {
-	display: inline-block;
-	width: 100px;
-	margin-right: 10px;
-}
-
-#loginForm input[type="text"], #loginForm input[type="password"] {
-	width: 200px;
-}
-
-#loginForm input[type="submit"] {
-	font-size: 12px;
-	line-height: 17px;
-	color: #333;
-	border-radius: 3px;
-	padding: 3px 5px;
-	display: inline-block;
-}
-
-.error {
-	color: #8b0000;
-}
