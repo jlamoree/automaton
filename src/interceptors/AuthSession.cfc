@@ -22,7 +22,10 @@
 		</cfif>
 		
 		<cfif variables.sessionStorage.exists("user")>
-			<cfset _event.setValue("user", variables.sessionStorage.getVar("user"), true)/>
+			<cfif structKeyExists(variables, "log") and variables.log.canInfo()>
+				<cfset variables.log.info("User exists in sessionStorage. Copied to event as private value.")/>
+			</cfif>
+			<cfset _event.setValue(name="user", value=variables.sessionStorage.getVar("user"), private=true)/>
 		</cfif>
 	</cffunction>
 

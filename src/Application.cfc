@@ -3,7 +3,7 @@
 	<cfset this.root = replace(getDirectoryFromPath(getMetadata(this).path), "\", "/", "all")/>
 	<cfset this.parent = reReplace(this.root, "/[^/]+/$", "/")/>
 
-	<cfset this.name = "automaton_#hash(this.root, 'MD5')#"/>
+	<cfset this.name = "automaton_#lcase(left(hash(this.root, 'MD5'), 6))#"/>
 	<cfset this.applicationTimeout = createTimespan(2, 0, 0, 0)/>
 	<cfset this.sessionManagement = true/>
 	<cfset this.sessionTimeout = createTimeSpan(0, 0, 30, 0)/>
