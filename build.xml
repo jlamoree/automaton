@@ -14,8 +14,6 @@
 		</classpath>
 	</taskdef>
 
-	<property name="version" value="1.0"/>
-
 	<!-- Node properties for multiple instances on a single server. Ex: ant -Dnode.name=node01 build -->
 	<property file="./build/${node.name}.properties"/>
 	<property name="node.name" value="localhost"/>
@@ -26,6 +24,7 @@
 	<!-- The user.name system property is provided by the JVM, which reads the environment variable %USERNAME% or $USER -->
 	<property file="./build/${user.name}.properties"/>
 
+	<property name="project.version" value="1.0"/>
 	<property name="project.build" location="./build"/>
 	<property name="project.test" location="./test"/>
 	<property name="project.src" location="./src"/>
@@ -84,6 +83,9 @@
 	<property name="colddoc.output" value="${java.io.tmpdir}/colddoc.html"/>
 
 	<!-- Deploy information -->
+	<property name="deploy.environment" value="production"/>
+	<property name="deploy.reinit.password" value="CFML4EVER"/>
+	<property name="deploy.mail.server" value="localhost"/>
 	<tstamp>
 		<format property="deploy.release" pattern="yyyyMMddHHmmss"/>
 	</tstamp>
@@ -141,8 +143,10 @@
 				<include name="*.cfm"/>
 			</fileset>
 			<filterset>
-				<filter token="VERSION" value="${deploy.version}"/>
+				<filter token="VERSION" value="${project.version}"/>
 				<filter token="RELEASE" value="${deploy.release}"/>
+				<filter token="ENVIRONMENT" value="${deploy.environment}"/>
+				<filter token="REINIT_PASSWORD" value="${deploy.reinit.password}"/>
 				<filter token="NODE_NAME" value="${node.name}"/>
 				<filter token="DEPLOY_BASEURL" value="${deploy.baseurl}"/>
 			</filterset>
