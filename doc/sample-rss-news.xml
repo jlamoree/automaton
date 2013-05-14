@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<rss version="2.0">
+<channel>
+	<title>The Automaton</title>
+	<link>http://automatonapp.com/</link>
+	<description>An example CFML application.</description>
+	<language>en-us</language>
+	<pubDate>Thu, 09 May 2013 10:40:41 -0700</pubDate>
+	<lastBuildDate>Thu, 28 Feb 2013 16:49:00 -0700</lastBuildDate>
+	<generator>AutomatonApp</generator>
+	<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+	<managingEditor>editor@automatonapp.com</managingEditor>
+	<webMaster>webmaster@automatonapp.com</webMaster>
+	<item>
+		<title>News Item Number One</title>
+		<link>http://automatonapp.com/</link>
+		<description>
+			Sample content for a new item in the feed.
+		</description>
+		<category>News</category>
+		<pubDate>Thu, 28 Feb 2013 16:49:00 -0700</pubDate>
+		<guid>automatonapp.com:63A33330-F980-D43DC-DBE9C2E83D3135822</guid>
+	</item>
+</channel>
