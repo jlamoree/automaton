@@ -40,7 +40,7 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			#renderView(view="fragments/footer", cache=true)#
+			#renderView(view="fragments/footer", cache=false)#
 		</div>
 	</div>
 	#renderView(view="fragments/scripts")#
