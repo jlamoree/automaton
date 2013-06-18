@@ -23,7 +23,7 @@
 			<div class="control-group">
 				<label class="control-label" for="password">Password:</label>
 				<div class="controls">
-					<input type="password" id="password" name="password" placeholder="" class="input-xlarge"/>
+					<input type="password" id="password" name="password" placeholder="" autocomplete="off" class="input-xlarge"/>
 				</div>
 			</div>
 			<div class="control-group">
