@@ -24,6 +24,10 @@
 				</cfif>
 			</cfif>
 			running in #environment# mode
+			<br/>
+			<cfif len(request.connection.client.geoip.city)>
+				Serving all of #request.connection.client.geoip.city#, #request.connection.client.geoip.region# (#request.connection.client.geoip.country#)
+			</cfif>
 			</small>
 		</p>
 	</footer>

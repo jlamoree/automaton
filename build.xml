@@ -107,6 +107,9 @@
 	<property name="http.appProxy.serverPortHeaderName" value="X-NGINX-Server-Port"/>
 	<property name="http.appProxy.clientAddressHeaderName" value="X-NGINX-Client-IP"/>
 	<property name="http.appProxy.schemeHeaderName" value="X-NGINX-Scheme"/>
+	<property name="http.geoIp.countryHeaderName" value="X-NGINX-GeoIP-Country"/>
+	<property name="http.geoIp.regionHeaderName" value="X-NGINX-GeoIP-Region"/>
+	<property name="http.geoIp.cityHeaderName" value="X-NGINX-GeoIP-City"/>
 
 	<!-- jMeter Config -->
 	<property name="jmeter.home" location="jMeter"/>
@@ -180,6 +183,9 @@
 				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${http.appProxy.serverPortHeaderName}"/>
 				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${http.appProxy.clientAddressHeaderName}"/>
 				<filter token="APP_PROXY_SCHEME_HEADER_NAME" value="${http.appProxy.schemeHeaderName}"/>
+				<filter token="GEOIP_COUNTRY_HEADER_NAME" value="${http.geoIp.countryHeaderName}"/>
+				<filter token="GEOIP_REGION_HEADER_NAME" value="${http.geoIp.regionHeaderName}"/>
+				<filter token="GEOIP_CITY_HEADER_NAME" value="${http.geoIp.cityHeaderName}"/>
 			</filterset>
 		</copy>
 	</target>

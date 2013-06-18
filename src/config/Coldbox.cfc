@@ -46,7 +46,7 @@
 				categories = {
 					"coldbox.system" = {levelMax="WARN", appenders="console"},
 					"interceptors.AuthSession" = {levelMax="INFO", appenders="console"},
-					"interceptors.Headers" = {levelMax="WARN", appenders="console"},
+					"interceptors.Headers" = {levelMax="INFO", appenders="console"},
 					"handlers.Auth" = {levelMax="INFO", appenders="console"}
 				}
 			};
