@@ -108,8 +108,11 @@
 	<property name="http.appProxy.clientAddressHeaderName" value="X-NGINX-Client-IP"/>
 	<property name="http.appProxy.schemeHeaderName" value="X-NGINX-Scheme"/>
 	<property name="http.geoIp.countryHeaderName" value="X-NGINX-GeoIP-Country"/>
-	<property name="http.geoIp.regionHeaderName" value="X-NGINX-GeoIP-Region"/>
+	<property name="http.geoIp.regionCodeHeaderName" value="X-NGINX-GeoIP-Region-Code"/>
+	<property name="http.geoIp.regionNameHeaderName" value="X-NGINX-GeoIP-Region-Name"/>
 	<property name="http.geoIp.cityHeaderName" value="X-NGINX-GeoIP-City"/>
+	<property name="http.geoIp.coordsHeaderName" value="X-NGINX-GeoIP-Coords"/>
+	<property name="http.geoIp.dmaCodeHeaderName" value="X-NGINX-GeoIP-DMA-Code"/>
 
 	<!-- jMeter Config -->
 	<property name="jmeter.home" location="jMeter"/>
@@ -184,8 +187,11 @@
 				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${http.appProxy.clientAddressHeaderName}"/>
 				<filter token="APP_PROXY_SCHEME_HEADER_NAME" value="${http.appProxy.schemeHeaderName}"/>
 				<filter token="GEOIP_COUNTRY_HEADER_NAME" value="${http.geoIp.countryHeaderName}"/>
-				<filter token="GEOIP_REGION_HEADER_NAME" value="${http.geoIp.regionHeaderName}"/>
+				<filter token="GEOIP_REGION_CODE_HEADER_NAME" value="${http.geoIp.regionCodeHeaderName}"/>
+				<filter token="GEOIP_REGION_NAME_HEADER_NAME" value="${http.geoIp.regionNameHeaderName}"/>
 				<filter token="GEOIP_CITY_HEADER_NAME" value="${http.geoIp.cityHeaderName}"/>
+				<filter token="GEOIP_COORDS_HEADER_NAME" value="${http.geoIp.coordsHeaderName}"/>
+				<filter token="GEOIP_DMA_CODE_HEADER_NAME" value="${http.geoIp.dmaCodeHeaderName}"/>
 			</filterset>
 		</copy>
 	</target>

@@ -13,8 +13,11 @@
 			<cfset variables.defaults.appProxyClientAddressHeaderName = "@APP_PROXY_CLIENT_ADDRESS_HEADER_NAME@"/>
 			<cfset variables.defaults.appProxySchemeHeaderName = "@APP_PROXY_SCHEME_HEADER_NAME@"/>
 			<cfset variables.defaults.geoIpCountryHeaderName = "@GEOIP_COUNTRY_HEADER_NAME@"/>
-			<cfset variables.defaults.geoIpRegionHeaderName = "@GEOIP_REGION_HEADER_NAME@"/>
+			<cfset variables.defaults.geoIpRegionCodeHeaderName = "@GEOIP_REGION_CODE_HEADER_NAME@"/>
+			<cfset variables.defaults.geoIpRegionNameHeaderName = "@GEOIP_REGION_NAME_HEADER_NAME@"/>
 			<cfset variables.defaults.geoIpCityHeaderName = "@GEOIP_CITY_HEADER_NAME@"/>
+			<cfset variables.defaults.geoIpCoordsHeaderName = "@GEOIP_COORDS_HEADER_NAME@"/>
+			<cfset variables.defaults.geoIpDmaCodeHeaderName = "@GEOIP_DMA_CODE_HEADER_NAME@"/>
 		</cfif>
 
 		<cfif structKeyExists(arguments, "options") and structKeyExists(arguments.options, "nodeName")>
@@ -45,8 +48,11 @@
 		<cfset memento.server.port = structValue(headers, d.appProxyServerPortHeaderName, "0")/>
 		<cfset memento.client.address = structValue(headers, d.appProxyClientAddressHeaderName, "0.0.0.0")/>
 		<cfset memento.client.geoip.country = structValue(headers, d.geoIpCountryHeaderName, "")/>
-		<cfset memento.client.geoip.region = structValue(headers, d.geoIpRegionHeaderName, "")/>
+		<cfset memento.client.geoip.regionCode = structValue(headers, d.geoIpRegionCodeHeaderName, "")/>
+		<cfset memento.client.geoip.regionName = structValue(headers, d.geoIpRegionNameHeaderName, "")/>
 		<cfset memento.client.geoip.city = structValue(headers, d.geoIpCityHeaderName, "")/>
+		<cfset memento.client.geoip.coords = structValue(headers, d.geoIpCoordsHeaderName, "")/>
+		<cfset memento.client.geoip.dmaCode = structValue(headers, d.geoIpDmaCodeHeaderName, "")/>
 		<cfreturn memento/>
 	</cffunction>
 
