@@ -18,6 +18,7 @@
 					</p>
 					<ul class="nav">
 						<li class="#iif(pageId eq 'home', de('active'), de(''))#"><a href="/Home/index">Home</a></li>
+						<li class="#iif(pageId eq 'media', de('active'), de(''))#"><a href="/Home/media">Media</a></li>
 						<li class="#iif(pageId eq 'about', de('active'), de(''))#"><a href="/Home/about">About</a></li>
 					</ul>
 				</div>

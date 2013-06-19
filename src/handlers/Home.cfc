@@ -9,6 +9,15 @@
 		<cfset arguments.event.setView("home/index")/>
 	</cffunction>
 
+	<cffunction name="media" access="public" returntype="void" output="false">
+		<cfargument name="event" type="coldbox.system.web.context.RequestContext" required="true"/>
+
+		<cfset arguments.event.setValue("pageTitle", "Media")/>
+		<cfset arguments.event.setValue("pageId", "media")/>
+		<cfset arguments.event.setLayout("main")>
+		<cfset arguments.event.setView("home/media")/>
+	</cffunction>
+
 	<cffunction name="about" access="public" returntype="void" output="false">
 		<cfargument name="event" type="coldbox.system.web.context.RequestContext" required="true"/>
 
