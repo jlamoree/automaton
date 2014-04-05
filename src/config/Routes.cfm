@@ -1,6 +1,5 @@
 <cfsilent>
-
-	<cfset setBaseURL("@DEPLOY_BASEURL@")/>
+	<cfset setBaseURL("/")/>
 	<cfset setUniqueURLs(false)/>
 
 	<cfset addRoute(pattern="/Status/hang/:timeout?", handler="Status", action="hang")/>

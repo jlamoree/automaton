@@ -30,120 +30,104 @@
 	<property name="project.src" location="./src"/>
 	<property name="project.doc" location="./doc"/>
 	<property name="project.lib" location="./lib"/>
-	<property name="project.cache" location="./cache"/>
-	<property name="project.work" location="./work"/>
-	<property name="project.results" location="${project.build}/results"/>
-	<property name="project.cdn" value="http://cdn.automatonapp.com"/>
+	<property name="project.cache" location="${project.build}/cache"/>
+	<property name="project.work" location="${project.build}/work"/>
+	<property name="project.deps" value="https://s3.amazonaws.com/jlamoree-dev/x"/>
+
+	<property name="tests.results" location="${project.build}/results"/>
 
 	<import file="${project.build}/macrodefs/requirefile.xml"/>
 
 	<!-- Tomcat -->
 	<property name="tomcat.home" location="/var/lib/tomcat"/>
-	<property name="tomcat.vhosts" location="${tomcat.home}/vhosts"/>
-	<property name="tomcat.docbase" value="automaton"/>
-
-	<!-- CFML Engine -->
-	<property name="cfml.engine" value="railo-4"/>
-	<property name="cfml.engine.root" location="${tomcat.vhosts}/${tomcat.docbase}"/>
-	<property name="cfml.engine.webinf" location="${cfml.engine.root}/WEB-INF"/>
-	<property name="cfml.engine.webroot" value="${cfml.engine.root}"/>
-	<property name="cfml.engine.hostname" value="127.0.0.1"/>
-	<property name="cfml.engine.port" value="8080"/>
+	<property name="tomcat.approot" location="${tomcat.home}/webapps/ROOT"/>
 
 	<!-- NGINX -->
-	<property name="nginx.root" value="/usr/share/nginx"/>
-	<property name="nginx.exec" value="/usr/sbin/nginx"/>
-	<property name="nginx.conf" value="/etc/nginx/conf.d"/>
-	<property name="nginx.hostname" value="automatonapp.com"/>
+	<property name="nginx.host" value="automatonapp.com"/>
 	<property name="nginx.port" value="80"/>
-	<property name="nginx.log.path" value="/var/log/nginx"/>
-	
-	<!-- ColdBox -->
-	<property name="coldbox.dist" value="coldbox_standalone_3.5.1.zip"/>
-	
-	<!-- Webapp Properties -->
+	<property name="nginx.logs" value="/var/log/nginx"/>
+
+	<!-- Application Properties -->
+	<property name="webapp.ip" value="127.0.0.1"/>
+	<property name="webapp.host" value="localhost"/>
+	<property name="webapp.port" value="8080"/>
+	<property name="webapp.path" location="${tomcat.approot}"/>
+	<property name="webapp.cdn" value="http://cdn.automatonapp.com"/>
 	<property name="webapp.datasource" value="automaton"/>
+	<property name="webapp.environment" value="production"/>
+
+	<!-- ColdBox -->
+	<property name="coldbox.dist" value="coldbox_standalone_3.8.1.zip"/>
+	<property name="coldbox.hash" value="e6ccde8faddfdda8970cf9a23798a42d755c68e6"/>
+	<property name="coldbox.path" location="${webapp.path}/coldbox"/>
+	<property name="coldbox.reinit.password" value="CFML4EVER"/>
 
 	<!-- MX Unit -->
 	<property name="mxunit.jar" location="${project.build}/lib/mxunit-ant.jar"/>
 	<property name="mxunit.dist" value="mxunit-framework-2.1.0.zip"/>
-	<property name="mxunit.outputdir" location="${project.results}"/>
+	<property name="mxunit.hash" value="d8448a379a1cdd920c8392f6fb433df1faf49c8e"/>
+	<property name="mxunit.outputdir" location="${tests.results}/mxunit"/>
 	<property name="mxunit.timeout" value="300"/>
 	<property name="mxunit.runner" value="/test/resources/HttpAntRunner.cfc?requestTimeout=${mxunit.timeout}"/>
 
 	<!-- VarScoper -->
 	<property name="varscoper.dist" value="varscoper4.zip"/>
+	<property name="varscoper.hash" value="8ea13f1457eea8c05532ca38c5ca40d9834f2ca8"/>
 	<property name="varscoper.url" value="http://${nginx.app.server}:${nginx.app.port}/test/varscoper/varScoper.cfm"/>
-	<property name="varscoper.path" value="${cfml.engine.webroot}/model"/>
+	<property name="varscoper.path" value="${webapp.path}/model"/>
 	<property name="varscoper.recurse" value="true"/>
-	<property name="varscoper.outputfile" location="${project.results}/varscoper.csv"/>
+	<property name="varscoper.outputfile" location="${tests.results}/varscoper/varscoper.csv"/>
 
 	<!-- ColdDoc -->
 	<property name="colddoc.dist" value="colddoc_v1.0.zip"/>
+	<property name="colddoc.hash" value="445e5ca1b0795a272f76cc0cb9b1e02a64bdcb67"/>
 	<property name="colddoc.output" value="${java.io.tmpdir}/colddoc.html"/>
 
 	<!-- Deploy information -->
-	<property name="deploy.environment" value="production"/>
-	<property name="deploy.reinit.password" value="CFML4EVER"/>
-	<property name="deploy.mail.server" value="localhost"/>
 	<tstamp>
 		<format property="deploy.release" pattern="yyyyMMddHHmmss"/>
 	</tstamp>
-	<property name="deploy.hostname" value="${nginx.hostname}"/>
-	<property name="deploy.port" value="${nginx.port}"/>
-	<if>
-		<equals arg1="${deploy.port}" arg2="80"/>
-		<then>
-			<property name="deploy.baseurl" value="http://${deploy.hostname}/"/>
-		</then>
-		<else>
-			<property name="deploy.baseurl" value="http://${deploy.hostname}:${deploy.port}/"/>
-		</else>
-	</if>
 
 	<!-- HTTP Headers -->
-	<property name="http.appProxy.serverHostHeaderName" value="X-NGINX-Host"/>
-	<property name="http.appProxy.serverAddressHeaderName" value="X-NGINX-Server-IP"/>
-	<property name="http.appProxy.serverPortHeaderName" value="X-NGINX-Server-Port"/>
-	<property name="http.appProxy.clientAddressHeaderName" value="X-NGINX-Client-IP"/>
-	<property name="http.appProxy.schemeHeaderName" value="X-NGINX-Scheme"/>
-	<property name="http.geoIp.countryHeaderName" value="X-NGINX-GeoIP-Country"/>
-	<property name="http.geoIp.regionCodeHeaderName" value="X-NGINX-GeoIP-Region-Code"/>
-	<property name="http.geoIp.regionNameHeaderName" value="X-NGINX-GeoIP-Region-Name"/>
-	<property name="http.geoIp.cityHeaderName" value="X-NGINX-GeoIP-City"/>
-	<property name="http.geoIp.coordsHeaderName" value="X-NGINX-GeoIP-Coords"/>
-	<property name="http.geoIp.dmaCodeHeaderName" value="X-NGINX-GeoIP-DMA-Code"/>
+	<property name="appProxy.serverHostHeaderName" value="X-NGINX-Host"/>
+	<property name="appProxy.serverAddressHeaderName" value="X-NGINX-Server-IP"/>
+	<property name="appProxy.serverPortHeaderName" value="X-NGINX-Server-Port"/>
+	<property name="appProxy.clientAddressHeaderName" value="X-NGINX-Client-IP"/>
+	<property name="appProxy.secureEndpointHeaderName" value="X-NGINX-Secure-Endpoint"/>
+	<property name="geoIp.countryHeaderName" value="X-NGINX-GeoIP-Country"/>
+	<property name="geoIp.regionCodeHeaderName" value="X-NGINX-GeoIP-Region-Code"/>
+	<property name="geoIp.regionNameHeaderName" value="X-NGINX-GeoIP-Region-Name"/>
+	<property name="geoIp.cityHeaderName" value="X-NGINX-GeoIP-City"/>
+	<property name="geoIp.coordsHeaderName" value="X-NGINX-GeoIP-Coords"/>
+	<property name="geoIp.dmaCodeHeaderName" value="X-NGINX-GeoIP-DMA-Code"/>
 
 	<!-- jMeter Config -->
 	<property name="jmeter.home" location="jMeter"/>
 	<property name="jmeter.threads" value="10"/>
 	<property name="jmeter.loop" value="1"/>
+	<property name="jmeter.results" location="${tests.results}/jmeter"/>
+
 
 	<target name="init" description="Initialize working directory and perform sanity check.">
 		<echo message="Starting Ant from ${basedir} by user ${user.name}"/>
 
-		<fail message="The CFML engine root (${cfml.engine.root}) does not exist.">
+		<fail message="The application webroot (${webapp.path}) does not exist.">
 			<condition>
 				<not>
-					<available file="${cfml.engine.root}" type="dir"/>
+					<available file="${webapp.path}" type="dir"/>
 				</not>
 			</condition>
 		</fail>
-		<fail message="The CFML engine webroot (${cfml.engine.webroot}) does not exist.">
-			<condition>
-				<not>
-					<available file="${cfml.engine.webroot}" type="dir"/>
-				</not>
-			</condition>
-		</fail>
+		<mkdir dir="${project.cache}"/>
 		<delete dir="${project.work}"/>
 		<mkdir dir="${project.work}"/>
 	</target>
 
 	<target name="deploy-app" depends="init" description="Deploy CFML application to server.">
-		<echo message="Deploying the application to ${cfml.engine.webroot}"/>
+		<echo message="Deploying the application to ${webapp.path}"/>
 		
-		<copy todir="${cfml.engine.webroot}/config" overwrite="true">
+		<!-- ColdBox Configuration -->
+		<copy todir="${webapp.path}/config" overwrite="true">
 			<fileset dir="${project.src}/config">
 				<include name="*.cfc"/>
 				<include name="*.cfm"/>
@@ -151,116 +135,81 @@
 			<filterset>
 				<filter token="VERSION" value="${project.version}"/>
 				<filter token="RELEASE" value="${deploy.release}"/>
-				<filter token="ENVIRONMENT" value="${deploy.environment}"/>
-				<filter token="REINIT_PASSWORD" value="${deploy.reinit.password}"/>
+				<filter token="ENVIRONMENT" value="${webapp.environment}"/>
+				<filter token="REINIT_PASSWORD" value="${coldbox.reinit.password}"/>
 				<filter token="NODE_NAME" value="${node.name}"/>
-				<filter token="DEPLOY_BASEURL" value="${deploy.baseurl}"/>
+				<filter token="WEBAPP_CDN" value="${webapp.cdn}"/>
 			</filterset>
 		</copy>
-		<copy todir="${cfml.engine.webroot}" overwrite="true">
+
+		<!-- Application Configuration -->
+		<copy todir="${webapp.path}" overwrite="true">
 			<fileset dir="${project.src}">
 				<include name="Application.cfc"/>
 			</fileset>
 			<filterset>
+				<filter token="ENVIRONMENT" value="${webapp.environment}"/>
 				<filter token="DATASOURCE" value="${webapp.datasource}"/>
 			</filterset>
 		</copy>
-		<copy todir="${cfml.engine.webroot}" overwrite="true">
+
+		<!-- Application Files -->
+		<copy todir="${webapp.path}" overwrite="true">
 			<fileset dir="${project.src}">
-				<exclude name="build/"/>
 				<exclude name="config/"/>
-				<exclude name="lib/"/>
-				<exclude name=".*"/>
 				<exclude name="Application.cfc"/>
 				<exclude name="ConnectionInspector.cfc"/>
-				<exclude name="settings.xml"/>
 			</fileset>
 		</copy>
-		<copy todir="${cfml.engine.webroot}" overwrite="true">
+		<copy todir="${webapp.path}" overwrite="true">
 			<fileset dir="${project.src}">
 				<include name="ConnectionInspector.cfc"/>
 			</fileset>
 			<filterset>
-				<filter token="APP_PROXY_SERVER_HOST_HEADER_NAME" value="${http.appProxy.serverHostHeaderName}"/>
-				<filter token="APP_PROXY_SERVER_ADDRESS_HEADER_NAME" value="${http.appProxy.serverAddressHeaderName}"/>
-				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${http.appProxy.serverPortHeaderName}"/>
-				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${http.appProxy.clientAddressHeaderName}"/>
-				<filter token="APP_PROXY_SCHEME_HEADER_NAME" value="${http.appProxy.schemeHeaderName}"/>
-				<filter token="GEOIP_COUNTRY_HEADER_NAME" value="${http.geoIp.countryHeaderName}"/>
-				<filter token="GEOIP_REGION_CODE_HEADER_NAME" value="${http.geoIp.regionCodeHeaderName}"/>
-				<filter token="GEOIP_REGION_NAME_HEADER_NAME" value="${http.geoIp.regionNameHeaderName}"/>
-				<filter token="GEOIP_CITY_HEADER_NAME" value="${http.geoIp.cityHeaderName}"/>
-				<filter token="GEOIP_COORDS_HEADER_NAME" value="${http.geoIp.coordsHeaderName}"/>
-				<filter token="GEOIP_DMA_CODE_HEADER_NAME" value="${http.geoIp.dmaCodeHeaderName}"/>
+				<filter token="APP_PROXY_SERVER_HOST_HEADER_NAME" value="${appProxy.serverHostHeaderName}"/>
+				<filter token="APP_PROXY_SERVER_ADDRESS_HEADER_NAME" value="${appProxy.serverAddressHeaderName}"/>
+				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${appProxy.serverPortHeaderName}"/>
+				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${appProxy.clientAddressHeaderName}"/>
+				<filter token="APP_PROXY_SCHEME_HEADER_NAME" value="${appProxy.schemeHeaderName}"/>
+				<filter token="GEOIP_COUNTRY_HEADER_NAME" value="${geoIp.countryHeaderName}"/>
+				<filter token="GEOIP_REGION_CODE_HEADER_NAME" value="${geoIp.regionCodeHeaderName}"/>
+				<filter token="GEOIP_REGION_NAME_HEADER_NAME" value="${geoIp.regionNameHeaderName}"/>
+				<filter token="GEOIP_CITY_HEADER_NAME" value="${geoIp.cityHeaderName}"/>
+				<filter token="GEOIP_COORDS_HEADER_NAME" value="${geoIp.coordsHeaderName}"/>
+				<filter token="GEOIP_DMA_CODE_HEADER_NAME" value="${geoIp.dmaCodeHeaderName}"/>
 			</filterset>
 		</copy>
 	</target>
-	
+
 	<target name="deploy-libs" depends="init" description="Deploy all the libraries needed by the CFML application.">
-		<requirefile file="${project.cache}/${coldbox.dist}" url="${project.cdn}/dist/${coldbox.dist}"/>
-		<delete dir="${cfml.engine.webroot}/coldbox"/>
-		<unzip src="${project.cache}/${coldbox.dist}" dest="${cfml.engine.webroot}/coldbox"/>
-	</target>
+		<requirefile file="${project.cache}/${coldbox.dist}" url="${project.deps}/${coldbox.dist}"/>
+		<verifyfile file="${project.cache}/${coldbox.dist}" hash="${coldbox.hash}"/>
 
-	<target name="deploy-nginx">
-		<if>
-			<os family="windows"/>
-			<then>
-				<!-- The Nginx configuration file (used outside this condition) needs directory separaters switched to slashes -->
-				<propertyregex property="nginx.app.webroot" input="${nginx.app.webroot}" regexp="\\" replace="/" override="true" global="true"/>
-
-				<!-- Copy the Nginx Windows Service files into place -->
-				<property name="deploy.nginx.conf" value="${nginx.conf}"/>
-				<copy file="${project.src}/config/nginx/service.xml" tofile="${nginx.root}/service/nginx.xml" overwrite="true">
-					<filterset>
-						<filter token="NGINX_EXEC" value="${nginx.exec}"/>
-						<filter token="NGINX_ROOT" value="${nginx.root}"/>
-					</filterset>
-				</copy>
-				<copy file="${project.lib}/winsw.exe" tofile="${nginx.root}/service/nginx.exe"/>
-			</then>
-			<else>
-				<!-- We'll place the Nginx configuration for non-Windows environments in the work path -->
-				<property name="deploy.nginx.conf" value="${project.work}/nginx"/>
-				<mkdir dir="${deploy.nginx.conf}"/>
-			</else>
-		</if>
-		
-		<copy todir="${deploy.nginx.conf}" overwrite="true">
-			<fileset dir="${project.src}/config/nginx">
-				<include name="automaton.conf"/>
-			</fileset>
-			<filterset>
-				<filter token="NGINX_PORT" value="${nginx.port}"/>
-				<filter token="NGINX_HOSTNAME" value="${nginx.hostname}"/>
-				<filter token="NGINX_LOG_PATH" value="${nginx.log.path}"/>
-				<filter token="NGINX_APP_PORT" value="${nginx.app.port}"/>
-				<filter token="NGINX_APP_SERVER" value="${nginx.app.server}"/>
-				<!-- Different for Windows vs. non-Windows -->
-				<filter token="NGINX_APP_WEBROOT" value="${nginx.app.webroot}"/>
-				<filter token="APP_PROXY_SERVER_HOST_HEADER_NAME" value="${http.appProxy.serverHostHeaderName}"/>
-				<filter token="APP_PROXY_SERVER_ADDRESS_HEADER_NAME" value="${http.appProxy.serverAddressHeaderName}"/>
-				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${http.appProxy.serverPortHeaderName}"/>
-				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${http.appProxy.clientAddressHeaderName}"/>
-				<filter token="APP_PROXY_SECURE_ENDPOINT_HEADER_NAME" value="${http.appProxy.secureEndpointHeaderName}"/>
-			</filterset>
-		</copy>
-		
-		<if>
-			<os family="mac"/>
-			<then>
-				<echo message="Nginx configuration file created in ${deploy.nginx.conf}."/>
-			</then>
-		</if>		
+		<delete dir="${coldbox.path}"/>
+		<mkdir dir="${coldbox.path}"/>
+		<unzip src="${project.cache}/${coldbox.dist}" dest="${coldbox.path}">
+			<patternset>
+				<include name="coldbox/**"/>
+			</patternset>
+			<regexpmapper from="^coldbox/(.+)$$" to="\1"/>
+		</unzip>
+		<delete dir="${coldbox.path}/coldbox"/>
+		<unzip src="${project.cache}/${coldbox.dist}" dest="${coldbox.path}">
+			<patternset>
+				<include name="license.txt"/>
+				<include name="coldbox-*"/>
+			</patternset>
+		</unzip>
 	</target>
 
 	<target name="deploy-unittests" depends="init" description="Deploy the MX Unit framework and all of the test cases.">
-		<requirefile file="${project.cache}/${mxunit.dist}" url="${project.cdn}/dist/${mxunit.dist}"/>
+		<requirefile file="${project.cache}/${mxunit.dist}" url="${project.deps}/${mxunit.dist}"/>
+		<verifyfile file="${project.cache}/${mxunit.dist}" hash="${mxunit.hash}"/>
+
+		<delete dir="${webapp.path}/mxunit"/>
+		<unzip src="${project.cache}/${mxunit.dist}" dest="${webapp.path}/mxunit"/>
 		
-		<delete dir="${cfml.engine.webroot}/mxunit"/>
-		<unzip src="${project.cache}/${mxunit.dist}" dest="${cfml.engine.webroot}/mxunit"/>
-		
-		<copy todir="${cfml.engine.webroot}/test" overwrite="true">
+		<copy todir="${webapp.path}/test" overwrite="true">
 			<fileset dir="${project.test}">
 				<include name="Application.cfc"/>
 			</fileset>
@@ -268,7 +217,7 @@
 				<filter token="DATASOURCE" value="${webapp.datasource}"/>
 			</filterset>
 		</copy>
-		<copy todir="${cfml.engine.webroot}/test" overwrite="true">
+		<copy todir="${webapp.path}/test" overwrite="true">
 			<fileset dir="${project.test}">
 				<exclude name="Application.cfc"/>
 			</fileset>
@@ -276,12 +225,13 @@
 	</target>
 
 	<target name="deploy-varscoper" depends="init" description="Deploy the files needed to run a varscoper test.">
-		<requirefile file="${project.cache}/${varscoper.dist}" url="${project.cdn}/dist/${varscoper.dist}"/>
-		
-		<delete dir="${cfml.engine.webroot}/test/varscoper"/>
-		<mkdir dir="${cfml.engine.webroot}/test/varscoper"/>
-		<touch file="${cfml.engine.webroot}/test/varscoper/Application.cfc"/>
-		<unzip src="${project.cache}/${varscoper.dist}" dest="${cfml.engine.webroot}/test/varscoper">
+		<requirefile file="${project.cache}/${varscoper.dist}" url="${project.deps}/${varscoper.dist}"/>
+		<verifyfile file="${project.cache}/${varscoper.dist}" hash="${varscoper.hash}"/>
+
+		<delete dir="${webapp.path}/test/varscoper"/>
+		<mkdir dir="${webapp.path}/test/varscoper"/>
+		<touch file="${webapp.path}/test/varscoper/Application.cfc"/>
+		<unzip src="${project.cache}/${varscoper.dist}" dest="${webapp.path}/test/varscoper">
 			<patternset>
 				<include name="display*.cfm"/>
 				<include name="fileDisplay.cfm"/>
@@ -293,10 +243,11 @@
 	</target>
 
 	<target name="deploy-colddoc" depends="init" description="Deploy the ColdDoc tool.">
-		<requirefile file="${project.cache}/${colddoc.dist}" url="${project.cdn}/dist/${colddoc.dist}"/>
+		<requirefile file="${project.cache}/${colddoc.dist}" url="${project.deps}/${colddoc.dist}"/>
+		<verifyfile file="${project.cache}/${colddoc.dist}" hash="${colddoc.hash}"/>
 		
-		<delete dir="${cfml.engine.webroot}/colddoc"/>
-		<unzip src="${project.cache}/${colddoc.dist}" dest="${cfml.engine.webroot}/colddoc">
+		<delete dir="${webapp.path}/colddoc"/>
+		<unzip src="${project.cache}/${colddoc.dist}" dest="${webapp.path}/colddoc">
 			<patternset>
 				<include name="colddoc/license.txt"/>
 				<include name="colddoc/ColdDoc.cfc"/>
@@ -307,9 +258,9 @@
 	</target>
 
 	<target name="undeploy" depends="init" description="Remove a deployed copy of the application and libraries.">
-		<echo message="Undeploying from ${cfml.engine.webroot}"/>
+		<echo message="Undeploying from ${webapp.path}"/>
 		<delete includeemptydirs="true">
-			<fileset dir="${cfml.engine.webroot}">
+			<fileset dir="${webapp.path}">
 				<include name="**/*"/>
 				<exclude name="WEB-INF/"/>
 				<exclude name="META-INF/"/>
@@ -321,10 +272,10 @@
 	<target name="test-unittests" depends="init" description="Run all of the MX Unit test files.">
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"/>
 
-		<delete dir="${project.results}"/>
-		<mkdir dir="${project.results}"/>
+		<delete dir="${mxunit.outputdir}"/>
+		<mkdir dir="${mxunit.outputdir}"/>
 		<mxunittask server="${cfml.engine.hostname}" port="${cfml.engine.port}" outputdir="${mxunit.outputdir}" defaultrunner="${mxunit.runner}">
-			<directory path="${cfml.engine.webroot}/test/unit" recurse="true" componentPath="test.unit"/>
+			<directory path="${webapp.path}/test/unit" recurse="true" componentPath="test.unit"/>
 		</mxunittask>
 	</target>
 
@@ -346,8 +297,8 @@
 	</target>
 
 	<target name="build-colddoc-html" depends="init" description="Deploy the mini-app and run it to generate HTML documentation in Javadoc style.">
-		<mkdir dir="${cfml.engine.webroot}/doc"/>
-		<copy todir="${cfml.engine.webroot}/doc" overwrite="true">
+		<mkdir dir="${webapp.path}/doc"/>
+		<copy todir="${webapp.path}/doc" overwrite="true">
 			<fileset dir="${project.doc}">
 				<include name="**"/>
 			</fileset>
@@ -356,8 +307,33 @@
 		<get src="http://${cfml.engine.hostname}:${cfml.engine.port}/doc/generate.cfm" dest="${colddoc.output}" verbose="false"/>
 	</target>
 
+	<target name="build-nginx-config" depends="init" description="Build NGINX configuration based on environment properties.">
+		<echo message="Creating NGINX configuration using the ${nginx.template} template file."/>
+		<copy todir="${project.work}" overwrite="true">
+			<fileset dir="${project.build}/templates/nginx">
+				<include name="${nginx.template}"/>
+			</fileset>
+			<filterset>
+				<filter token="NGINX_PORT" value="${nginx.port}"/>
+				<filter token="NGINX_HOST" value="${nginx.host}"/>
+				<filter token="NGINX_LOGS" value="${nginx.logs}"/>
+				<filter token="WEBAPP_IP" value="${webapp.ip}"/>
+				<filter token="WEBAPP_HOST" value="${webapp.host}"/>
+				<filter token="WEBAPP_PORT" value="${webapp.port}"/>
+				<filter token="WEBAPP_PATH" value="${webapp.path}"/>
+				<filter token="APP_PROXY_SERVER_HOST_HEADER_NAME" value="${appProxy.serverHostHeaderName}"/>
+				<filter token="APP_PROXY_SERVER_ADDRESS_HEADER_NAME" value="${appProxy.serverAddressHeaderName}"/>
+				<filter token="APP_PROXY_SERVER_PORT_HEADER_NAME" value="${appProxy.serverPortHeaderName}"/>
+				<filter token="APP_PROXY_CLIENT_ADDRESS_HEADER_NAME" value="${appProxy.clientAddressHeaderName}"/>
+				<filter token="APP_PROXY_SECURE_ENDPOINT_HEADER_NAME" value="${appProxy.secureEndpointHeaderName}"/>
+			</filterset>
+		</copy>
+		<move file="${project.work}/${nginx.template}" tofile="${project.work}/automaton.conf"/>
+		<echo message="NGINX configuration file created as ${project.work}/automaton.conf"/>
+	</target>
+
 	<target name="test-jmeter" description="Run jMeter load tests">
-		<jmeter jmeterhome="${jmeter.home}" testplan="${project.test}/jmeter/user-login.jmx" resultlog="${project.results}/jmeter/user-login.jtl">
+		<jmeter jmeterhome="${jmeter.home}" testplan="${project.test}/jmeter/user-login.jmx" resultlog="${jmeter.results}/user-login.jtl">
 			<property name="request.threads" value="${jmeter.threads}"/>
 			<property name="request.loop" value="${jmeter.loop}"/>
 		</jmeter>

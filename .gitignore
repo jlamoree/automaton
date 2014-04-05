@@ -1,6 +1,5 @@
-dist
-temp
-work
+build/cache
+build/work
 build/results
 .DS_Store
 .tm_properties

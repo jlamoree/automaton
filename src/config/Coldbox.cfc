@@ -25,6 +25,7 @@
 				version = "@VERSION@",
 				release = "@RELEASE@",
 				nodeName = "@NODE_NAME@",
+				cdn = "@WEBAPP_CDN@",
 				site = {
 					title = "The Automaton App"
 				}
@@ -51,8 +52,6 @@
 				}
 			};
 
-			variables.mailSettings = {server = "@MAIL_SERVER@"};
-
 			variables.layoutSettings = {
 				defaultLayout = "main.cfm",
 				defaultView = ""
@@ -63,10 +62,7 @@
 	<cffunction name="detectEnvironment" returntype="string" access="public" output="false">
 		<cfset var environment = "@ENVIRONMENT@"/>
 
-		<cfif len(environment) and find("@", environment) eq 0>
-			<cfreturn environment/>
-		</cfif>
-		<cfreturn "development"/>
+		<cfreturn environment/>
 	</cffunction>
 
 	<cffunction name="production" returntype="void" access="public" output="false">
