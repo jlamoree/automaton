@@ -1,6 +1,7 @@
 <cfcomponent extends="coldbox.system.EventHandler" output="false">
 
 	<cfproperty name="userService" inject="userService"/>
+	<cfproperty name="jmxProxy" inject="jmxProxy"/>
 	<cfproperty name="sessionStorage" inject="coldbox:plugin:sessionStorage"/>
 	<cfproperty name="log" inject="logbox:logger:{this}"/>
 
@@ -78,6 +79,19 @@
 			<cfset variables.sessionStorage.deleteVar("user")/>
 		</cfif>
 		<cfset setNextEvent("Home.index")/>
+	</cffunction>
+	
+	<cffunction name="sessionDetails" returntype="void" access="public" output="false">
+		<cfargument name="event" type="coldbox.system.web.context.RequestContext" required="true"/>
+		
+		<cfset var _event = arguments.event/>
+		<cfset var result = structNew()/>
+		<cfset var sesssionId = _event.getTrimValue("sessionId", "")/>
+
+		<cfset result["currentTime"] = createObject("java", "System").currentTimeMillis()/>
+		<cfset structAppend(result, variables.jmxProxy.getSessionDetails(sessionId))/>
+
+		<cfset _event.renderData(data=result, type="json")/>
 	</cffunction>
 
 </cfcomponent>

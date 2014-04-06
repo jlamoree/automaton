@@ -27,7 +27,7 @@
 					remoteIpHeader="X-NGINX-TC-Remote-IP"
 					protocolHeader="X-NGINX-TC-Protocol"/>
 				<Valve className="org.apache.catalina.valves.CrawlerSessionManagerValve"
-					crawlerUserAgents=".*Nagios.*|.*CFSCHEDULE.*" sessionInactiveInterval="600"/>
+					crawlerUserAgents="StatelessAjaxClient|.*Nagios.*|.*CFSCHEDULE.*" sessionInactiveInterval="600"/>
 				<Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
 					prefix="localhost_access_log." suffix=".txt" pattern="combined"/>
 			</Host>

@@ -101,12 +101,16 @@
 	<property name="geoIp.coordsHeaderName" value="X-NGINX-GeoIP-Coords"/>
 	<property name="geoIp.dmaCodeHeaderName" value="X-NGINX-GeoIP-DMA-Code"/>
 
-	<!-- jMeter Config -->
+	<!-- JMeter Config -->
 	<property name="jmeter.home" location="jMeter"/>
 	<property name="jmeter.threads" value="10"/>
 	<property name="jmeter.loop" value="1"/>
 	<property name="jmeter.results" location="${tests.results}/jmeter"/>
 
+	<!-- JMX Config -->
+	<property name="jmx.username" value="jmx"/>
+	<property name="jmx.password" value="secret"/>
+	<property name="jmx.manager.bean" value="Catalina:context=/,host=localhost,type=Manager"/>
 
 	<target name="init" description="Initialize working directory and perform sanity check.">
 		<echo message="Starting Ant from ${basedir} by user ${user.name}"/>
@@ -138,7 +142,14 @@
 				<filter token="ENVIRONMENT" value="${webapp.environment}"/>
 				<filter token="REINIT_PASSWORD" value="${coldbox.reinit.password}"/>
 				<filter token="NODE_NAME" value="${node.name}"/>
+				<filter token="WEBAPP_IP" value="${webapp.ip}"/>
+				<filter token="WEBAPP_HOST" value="${webapp.host}"/>
+				<filter token="WEBAPP_PORT" value="${webapp.port}"/>
+				<filter token="WEBAPP_PATH" value="${webapp.path}"/>
 				<filter token="WEBAPP_CDN" value="${webapp.cdn}"/>
+				<filter token="JMX_USERNAME" value="${jmx.username}"/>
+				<filter token="JMX_PASSWORD" value="${jmx.password}"/>
+				<filter token="JMX_MANAGER_BEAN" value="${jmx.manager.bean}"/>
 			</filterset>
 		</copy>
 

@@ -13,6 +13,9 @@
 
 			map("userService")
 				.to("model.user.UserService");
+
+			map("jmxProxy")
+				.to("model.tomcat.JMXProxy");
 			
 		</cfscript>
 	</cffunction>

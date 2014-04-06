@@ -28,6 +28,12 @@
 				cdn = "@WEBAPP_CDN@",
 				site = {
 					title = "The Automaton App"
+				},
+				jmxConfig = {
+					username = "@JMX_USERNAME@",
+					password = "@JMX_PASSWORD@",
+					managerBean = "@JMX_MANAGER_BEAN@",
+					baseUrl = "http://@WEBAPP_IP@:@WEBAPP_PORT@/manager/jmxproxy"
 				}
 			};
 
